@@ -4,6 +4,7 @@ class Bicycle {
 
   // --- START ACTIVE RECORD CODE -- //
   static protected $database;
+  static protected $db_columns = ['id', 'brand', 'model', 'year', 'category', 'color', 'description', 'gender', 'price', 'weight_kg', 'condition_id'];
 
   static public function set_database($database) {
     self::$database = $database;
@@ -63,18 +64,9 @@ class Bicycle {
   public function create() {
     // sql for inserting this object into db record
     $sql = "INSERT INTO `bicycles` (";
-    $sql .= "brand, model, year, category, color, description, gender, price, weight_kg, condition_id";
+    $sql .= implode(",", array_keys($this->attributes()));
     $sql .= ") VALUES (";
-    $sql .= "'" . self::$database->escape_string($this->brand) . "', ";
-    $sql .= "'" . self::$database->escape_string($this->model) . "', ";
-    $sql .= "'" . self::$database->escape_string($this->year) . "', ";
-    $sql .= "'" . self::$database->escape_string($this->category) . "', ";
-    $sql .= "'" . self::$database->escape_string($this->color) . "', ";
-    $sql .= "'" . self::$database->escape_string($this->description) . "', ";
-    $sql .= "'" . self::$database->escape_string($this->gender) . "', ";
-    $sql .= "'" . self::$database->escape_string($this->price) . "', ";
-    $sql .= "'" . self::$database->escape_string($this->weight_kg) . "', ";
-    $sql .= "'" . self::$database->escape_string($this->condition_id) . "' ";
+    $sql .= "'" . implode("', '", array_values($this->attributes())) . "'";
     $sql .=")";
 
 
@@ -89,6 +81,21 @@ class Bicycle {
     }
 
     return $result;
+  }
+
+
+  protected function attributes() {
+      $attributes = [];
+      foreach (self::$db_columns as $column) {
+        if ($column == 'id') { continue; }
+        $attributes[$column] = $this->$column;
+      }
+
+      if(!empty($attributes)) {
+        return $attributes;
+      } else {
+        return false;
+      }
   }
 
   // --- END ACTIVE RECORD CODE -- //

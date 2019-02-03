@@ -51,6 +51,9 @@ class Bicycle {
     }
   }
 
+
+
+
   static protected function instantiate($record) {
     $object = new self;
 
@@ -61,7 +64,16 @@ class Bicycle {
     return $object;
   }
 
-  public function create() {
+  public function save() {
+    //because new bicycle donot have id so we can differentiate
+    if(!isset($this->id)) {
+      return $this->create();
+    } else {
+      return $this->update();
+    }
+  }
+  
+  protected function create() {
     $sanitized_attributes = $this->sanitize_attributes();
     // sql for inserting this object into db record
     $sql = "INSERT INTO `bicycles` (";
@@ -84,7 +96,7 @@ class Bicycle {
     return $result;
   }
 
-  public function update() {
+  protected function update() {
     $sanitized_attributes = $this->sanitize_attributes();
     $attribute_pairs = [];
 

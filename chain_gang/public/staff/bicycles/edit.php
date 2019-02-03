@@ -26,7 +26,7 @@ if(is_post_request()) {
   $args['description'] = $_POST['description'] ?? NULL;
 
   $bicycle->merge_attributes($args);
-  $result = $bicycle->update();
+  $result = $bicycle->save();
 
   if($result === true) {
     $_SESSION['message'] = 'The bicycle was updated successfully.';

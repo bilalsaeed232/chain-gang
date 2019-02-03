@@ -84,6 +84,26 @@ class Bicycle {
     return $result;
   }
 
+  public function update() {
+    $sanitized_attributes = $this->sanitize_attributes();
+    $attribute_pairs = [];
+
+    foreach ($sanitized_attributes as $key => $value) {
+      $attribute_pairs[] = "{$key}='". self::$database->escape_string($value) ."'";
+    }
+
+    $sql = "UPDATE `bicycles` SET ";
+    $sql .= implode(', ', $attribute_pairs) . " ";
+    $sql .= "WHERE id='". self::$database->escape_string($this->id) . "' ";
+    $sql .= "LIMIT 1";
+
+
+    //echo $sql; exit;
+
+    $result = self::$database->query($sql);
+    return $result;
+  }
+
 
   protected function attributes() {
       $attributes = [];
@@ -99,6 +119,16 @@ class Bicycle {
       return false;
   }
 
+  public function merge_attributes($args=[]) {
+    //merge the attributes with actual object, to insure consistency
+    foreach ($args as $key => $value) {
+      if (property_exists($this, $key) && !is_null($value)) {
+        //if this property exists on this object
+        $this->$key = $value;
+      }
+    }
+  }
+
   protected function sanitize_attributes() {
     $sanitized_attributes = [];
 
@@ -112,6 +142,8 @@ class Bicycle {
 
     return false;
   }
+
+
 
   // --- END ACTIVE RECORD CODE -- //
 

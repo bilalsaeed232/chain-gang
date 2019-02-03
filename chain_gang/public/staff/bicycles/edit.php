@@ -7,6 +7,9 @@ if(!isset($_GET['id'])) {
 }
 $id = $_GET['id'];
 
+$bicycle = Bicycle::find_by_id($id);
+
+
 if(is_post_request()) {
 
   // Save record using post parameters
@@ -22,9 +25,9 @@ if(is_post_request()) {
   $args['condition_id'] = $_POST['condition_id'] ?? NULL;
   $args['description'] = $_POST['description'] ?? NULL;
 
-  $bicycle = [];
+  $bicycle->merge_attributes($args);
+  $result = $bicycle->update();
 
-  $result = false;
   if($result === true) {
     $_SESSION['message'] = 'The bicycle was updated successfully.';
     redirect_to(url_for('/staff/bicycles/show.php?id=' . $id));
@@ -32,10 +35,6 @@ if(is_post_request()) {
     // show errors
   }
 
-} else {
-
-  // display the form
-  $bicycle = Bicycle::find_by_id($id);
 }
 
 ?>

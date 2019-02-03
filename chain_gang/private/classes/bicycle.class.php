@@ -9,12 +9,24 @@ class Bicycle {
     self::$database = $database;
   }
 
+
+  // get object array of this class from records fetched
   static private function find_by_sql($sql) {
     $result = self::$database->query($sql);
     if(!$result) {
       exit("Database query failed.");
     }
-    return $result->fetch_assoc();
+
+    $objects_array = [];
+
+    while ($row = $result->fetch_assoc()) {
+      $objects_array[] = self::instantiate($row);
+    }
+
+    // freeup the result variable;
+    $result->free();
+
+    return $objects_array;
   } 
 
   static public function find_all() {
@@ -22,8 +34,19 @@ class Bicycle {
     return self::find_by_sql($sql);
   }
 
+  static protected function instantiate($record) {
+    $object = new self;
+
+    //get every key and value in db record and populate Bicycle object
+    foreach($record as $property => $value) {
+      $object->$property = $value;
+    }
+    return $object;
+  }
+
   // --- END ACTIVE RECORD CODE -- //
 
+  public $id;
   public $brand;
   public $model;
   public $year;

@@ -60,6 +60,37 @@ class Bicycle {
     return $object;
   }
 
+  public function create() {
+    // sql for inserting this object into db record
+    $sql = "INSERT INTO `bicycles` (";
+    $sql .= "brand, model, year, category, color, description, gender, price, weight_kg, condition_id";
+    $sql .= ") VALUES (";
+    $sql .= "'" . self::$database->escape_string($this->brand) . "', ";
+    $sql .= "'" . self::$database->escape_string($this->model) . "', ";
+    $sql .= "'" . self::$database->escape_string($this->year) . "', ";
+    $sql .= "'" . self::$database->escape_string($this->category) . "', ";
+    $sql .= "'" . self::$database->escape_string($this->color) . "', ";
+    $sql .= "'" . self::$database->escape_string($this->description) . "', ";
+    $sql .= "'" . self::$database->escape_string($this->gender) . "', ";
+    $sql .= "'" . self::$database->escape_string($this->price) . "', ";
+    $sql .= "'" . self::$database->escape_string($this->weight_kg) . "', ";
+    $sql .= "'" . self::$database->escape_string($this->condition_id) . "' ";
+    $sql .=")";
+
+
+  //  echo $sql; exit;
+
+    $result = self::$database->query($sql);
+    //echo self::$database->error; exit;
+    if($result) {
+      //so that our object is not inconsistent with db record
+      // as db id is generated automatically
+      $this->id = self::$database->insert_id; //gets generated db id
+    }
+
+    return $result;
+  }
+
   // --- END ACTIVE RECORD CODE -- //
 
   public $id;

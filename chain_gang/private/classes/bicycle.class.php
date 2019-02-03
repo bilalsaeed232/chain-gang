@@ -34,6 +34,22 @@ class Bicycle {
     return self::find_by_sql($sql);
   }
 
+  static public function find_by_id($id) {
+    $sql = "SELECT * FROM bicycles ";
+    $sql .= "WHERE id='" . self::$database->escape_string($id) . "'";
+
+    $obj_array = self::find_by_sql($sql);
+
+    
+    
+    if(empty($obj_array)) {
+      return false;
+    } else {
+      // return only single object as expected
+      return array_shift($obj_array);
+    }
+  }
+
   static protected function instantiate($record) {
     $object = new self;
 
@@ -89,6 +105,10 @@ class Bicycle {
     //     $this->$k = $v;
     //   }
     // }
+  }
+
+  public function get_name() {
+    return "(" . $this->brand . " " . $this->year . " " . $this->model . ")";
   }
 
   public function weight_kg() {

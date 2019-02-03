@@ -44,6 +44,7 @@
   }
   spl_autoload_register('my_autoload');
 
-  $database = db_connect();
+$database = db_connect();
+
 
 ?>

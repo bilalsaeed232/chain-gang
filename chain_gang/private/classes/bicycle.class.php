@@ -62,11 +62,12 @@ class Bicycle {
   }
 
   public function create() {
+    $sanitized_attributes = $this->sanitize_attributes();
     // sql for inserting this object into db record
     $sql = "INSERT INTO `bicycles` (";
-    $sql .= implode(",", array_keys($this->attributes()));
+    $sql .= implode(",", array_keys($sanitized_attributes));
     $sql .= ") VALUES (";
-    $sql .= "'" . implode("', '", array_values($this->sanitized_attributes())) . "'";
+    $sql .= "'" . implode("', '", array_values($sanitized_attributes)) . "'";
     $sql .=")";
 
 
@@ -98,7 +99,7 @@ class Bicycle {
       return false;
   }
 
-  protected function sanitized_attributes() {
+  protected function sanitize_attributes() {
     $sanitized_attributes = [];
 
     foreach($this->attributes() as $column => $value) {

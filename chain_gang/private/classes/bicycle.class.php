@@ -2,6 +2,28 @@
 
 class Bicycle {
 
+  // --- START ACTIVE RECORD CODE -- //
+  static protected $database;
+
+  static public function set_database($database) {
+    self::$database = $database;
+  }
+
+  static private function find_by_sql($sql) {
+    $result = self::$database->query($sql);
+    if(!$result) {
+      exit("Database query failed.");
+    }
+    return $result->fetch_assoc();
+  } 
+
+  static public function find_all() {
+    $sql = "SELECT * FROM bicycles";
+    return self::find_by_sql($sql);
+  }
+
+  // --- END ACTIVE RECORD CODE -- //
+
   public $brand;
   public $model;
   public $year;

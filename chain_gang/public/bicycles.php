@@ -48,6 +48,13 @@ $bike_array = $parser->parse();
       <?php } ?>
 
     </table>
+
+    <strong><?php
+      
+      $result = Bicycle::find_all();
+      echo $result['model'];
+    
+    ?></strong>
   </div>
 
 </div>

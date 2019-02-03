@@ -66,7 +66,7 @@ class Bicycle {
     $sql = "INSERT INTO `bicycles` (";
     $sql .= implode(",", array_keys($this->attributes()));
     $sql .= ") VALUES (";
-    $sql .= "'" . implode("', '", array_values($this->attributes())) . "'";
+    $sql .= "'" . implode("', '", array_values($this->sanitized_attributes())) . "'";
     $sql .=")";
 
 
@@ -93,9 +93,23 @@ class Bicycle {
 
       if(!empty($attributes)) {
         return $attributes;
-      } else {
-        return false;
       }
+      
+      return false;
+  }
+
+  protected function sanitized_attributes() {
+    $sanitized_attributes = [];
+
+    foreach($this->attributes() as $column => $value) {
+      $sanitized_attributes[$column] = self::$database->escape_string($value);
+    }
+
+    if(!empty($sanitized_attributes)) {
+      return $sanitized_attributes;
+    }
+
+    return false;
   }
 
   // --- END ACTIVE RECORD CODE -- //

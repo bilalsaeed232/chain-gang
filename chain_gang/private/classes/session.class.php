@@ -9,9 +9,6 @@ class Session {
     private $last_login;
 
 
-
-
-
     public function __construct() {
         session_start();
         $this->verify_restore_session();
@@ -42,6 +39,17 @@ class Session {
         return ($this->is_logged_in() ? $this->admin_id : false);
     }
 
+    public function message($msg=""){
+        if(!empty($msg)) {
+            $_SESSION['message'] = $msg;
+        } else {
+            return $_SESSION['message'] ?? '';
+        }
+    }
+
+    public function clear_message() {
+        unset($_SESSION['message']);
+    }
 
     public function logout() {
         unset($_SESSION['admin_id']);

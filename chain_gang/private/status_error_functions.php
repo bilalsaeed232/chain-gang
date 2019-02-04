@@ -35,8 +35,10 @@ function get_and_clear_session_message() {
 }
 
 function display_session_message() {
-  $msg = get_and_clear_session_message();
+  global $session;
+  $msg = $session->message();
   if(isset($msg) && $msg != '') {
+    $session->clear_message();
     return '<div id="message">' . h($msg) . '</div>';
   }
 }

@@ -16,6 +16,23 @@ class Admin extends DatabaseObject {
 
    public $check_password = true;
 
+
+   static public function find_by_username($username) {
+      $sql = "SELECT * FROM " .static::$table_name . " ";
+      $sql .= "WHERE username='" . parent::$database->escape_string($username) . "' ";
+      $sql .= "LIMIT 1";
+
+      $obj_array = parent::find_by_sql($sql);
+
+ 
+
+      if(empty($obj_array)) {
+         return false;
+      } 
+
+      return array_shift($obj_array);
+   }
+
    public function __construct($args=[]) {
       $this->id = $args['id'] ?? NULL;
       $this->first_name = $args['first_name'] ?? NULL;
@@ -25,8 +42,6 @@ class Admin extends DatabaseObject {
       $this->password = $args['password'] ?? NULL;
       $this->confirm_password = $args['confirm_password'] ?? NULL;
    }
-
-
 
    public function get_name() {
       return $this->first_name . " " . $this->last_name;
@@ -61,7 +76,6 @@ class Admin extends DatabaseObject {
       }
    }
 
-
    protected function validate() {
       $this->errors = [];
 
@@ -81,9 +95,12 @@ class Admin extends DatabaseObject {
          $this->errors[] = "Email format is invalid.";
       }
 
-   
+
+      //USERNAME VALIDATIONS
       if(is_blank($this->username)) {
          $this->errors[] = "Username is required.";
+      } elseif(!has_unique_username($this->username, $this->id ?? 0)) {
+         $this->errors[] = "Username is already taken, provide a different one.";
       }
 
 
@@ -103,6 +120,9 @@ class Admin extends DatabaseObject {
 
       return $this->errors;
     }
+
+
+
 }
 
 ?>

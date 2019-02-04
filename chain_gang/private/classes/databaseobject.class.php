@@ -12,7 +12,7 @@ class DatabaseObject {
 
 
     // get object array of this class from records fetched
-    static private function find_by_sql($sql) {
+    static protected function find_by_sql($sql) {
         $result = self::$database->query($sql);
         if(!$result) {
         exit("Database query failed.");
@@ -102,9 +102,9 @@ class DatabaseObject {
         $result = self::$database->query($sql);
         //echo self::$database->error; exit;
         if($result) {
-        //so that our object is not inconsistent with db record
-        // as db id is generated automatically
-        $this->id = self::$database->insert_id; //gets generated db id
+            //so that our object is not inconsistent with db record
+            // as db id is generated automatically
+            $this->id = self::$database->insert_id; //gets generated db id
         }
 
         return $result;

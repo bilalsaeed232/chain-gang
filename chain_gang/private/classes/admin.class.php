@@ -47,6 +47,10 @@ class Admin extends DatabaseObject {
       return $this->first_name . " " . $this->last_name;
    }
 
+   public function verify_password($password) {
+      return password_verify($password, $this->hashed_password); 
+   }
+
    protected function create() {
       $this->hash_password();
       if($this->hashed_password){
@@ -75,6 +79,8 @@ class Admin extends DatabaseObject {
          $this->hashed_password = password_hash($this->password, PASSWORD_BCRYPT);
       }
    }
+
+   
 
    protected function validate() {
       $this->errors = [];

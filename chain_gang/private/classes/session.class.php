@@ -3,6 +3,7 @@
 class Session {
 
     private $admin_id;
+    public $username;
 
 
 
@@ -19,8 +20,9 @@ class Session {
         if($admin) {
             //prevent session fixation attacks
             session_regenerate_id();
-            $_SESSION['admin_id'] = $admin->id;
-            $this->admin_id = $admin->id;
+            $this->admin_id = $_SESSION['admin_id'] = $admin->id;
+            $this->username = $_SESSION['username'] = $admin->username;
+            
             return true;
         }
 
@@ -31,16 +33,23 @@ class Session {
         return isset($this->admin_id);
     }
 
+    public function get_admin_id() {
+        return ($this->is_logged_in() ? $this->admin_id : false);
+    }
 
 
     public function logout() {
         unset($_SESSION['admin_id']);
+        unset($_SESSION['username']);
+        unset($this->username);
         unset($this->admin_id);
+        
     }
 
     protected function verify_restore_session() {
         if(isset($_SESSION['admin_id'])) {
             $this->admin_id = $_SESSION['admin_id'];
+            $this->username = $_SESSION['username'];
         }
     }
 

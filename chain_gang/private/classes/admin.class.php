@@ -3,7 +3,7 @@
 class Admin extends DatabaseObject {
    static protected $table_name = "admins";
    static protected $db_columns = ['id', 'first_name', 'last_name', 'email', 'username', 'hashed_password'];
-
+   public $errors = [];
 
    public $id;
    public $first_name;
@@ -30,13 +30,7 @@ class Admin extends DatabaseObject {
       return $this->first_name . " " . $this->last_name;
    }
 
-   protected function hash_password() {
-      if(!is_null($this->password)) {
-         $this->hashed_password = password_hash($this->password, PASSWORD_BCRYPT);
-      }
-   }
-
-   public function create() {
+   protected function create() {
       $this->hash_password();
       if($this->hashed_password){
          return parent::create();
@@ -45,11 +39,47 @@ class Admin extends DatabaseObject {
       return false;
    }
 
-   public function update() {
+   protected function update() {
       $this->hash_password();
       return parent::update();
    }
 
+  protected function hash_password() {
+      if(!is_null($this->password)) {
+         $this->hashed_password = password_hash($this->password, PASSWORD_BCRYPT);
+      }
+   }
+
+
+   protected function validate() {
+      $this->errors = [];
+
+      if(is_blank($this->first_name)) {
+         $this->errors[] = "First name is required.";
+      }
+
+      if(is_blank($this->last_name)) {
+         $this->errors[] = "Last name is required.";
+      }
+
+      if(is_blank($this->email)) {
+         $this->errors[] = "Email is required.";
+      }
+
+      if(is_blank($this->username)) {
+         $this->errors[] = "Username is required.";
+      }
+
+      if(is_blank($this->password)) {
+         $this->errors[] = "Password is required.";
+      }
+
+      if(is_blank($this->confirm_password)) {
+         $this->errors[] = "Confirm password is required.";
+      }
+
+      return $this->errors;
+    }
 }
 
 ?>

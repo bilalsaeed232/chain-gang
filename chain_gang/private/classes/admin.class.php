@@ -61,22 +61,33 @@ class Admin extends DatabaseObject {
       if(is_blank($this->last_name)) {
          $this->errors[] = "Last name is required.";
       }
-
+      
+      //EMAIL VALIDATIONS
       if(is_blank($this->email)) {
          $this->errors[] = "Email is required.";
       }
+      if (!has_valid_email_format($this->email)) {
+         $this->errors[] = "Email format is invalid.";
+      }
 
+   
       if(is_blank($this->username)) {
          $this->errors[] = "Username is required.";
       }
 
+
+
+      //PASSWORD VALIDATIONS
       if(is_blank($this->password)) {
          $this->errors[] = "Password is required.";
+      } elseif (!has_length_greater_than($this->password, 7)) {
+         $this->errors[] = "Password must be atleast 8 characters long.";
+      } elseif (is_blank($this->confirm_password)) {
+         $this->errors[] = "Confirm password is required.";
+      } elseif ($this->password != $this->confirm_password) {
+         $this->errors[] = "Password and confirm password must match.";
       }
 
-      if(is_blank($this->confirm_password)) {
-         $this->errors[] = "Confirm password is required.";
-      }
 
       return $this->errors;
     }

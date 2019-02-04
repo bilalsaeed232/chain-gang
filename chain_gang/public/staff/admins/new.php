@@ -2,6 +2,8 @@
 
 require_once('../../../private/initialize.php');
 
+login_required();
+
 if(is_post_request()) {
 
   // Create record using post parameters

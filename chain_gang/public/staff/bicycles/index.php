@@ -1,6 +1,6 @@
-<?php require_once('../../../private/initialize.php'); ?>
+<?php require_once('../../../private/initialize.php'); 
 
-<?php
+login_required();
   
 // Find all bicycles;
 $bicycles = Bicycle::find_all();

@@ -1,6 +1,7 @@
-<?php require_once('../../../private/initialize.php'); ?>
+<?php 
+  require_once('../../../private/initialize.php'); 
 
-<?php
+  login_required();
   
   // Find all admins;
   $admins = Admin::find_all();

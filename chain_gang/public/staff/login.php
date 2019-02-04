@@ -8,8 +8,14 @@ if(is_post_request()) {
     $admin = Admin::find_by_username($args['username']);
     
     if($admin != false && $admin->verify_password($args['password'])) { 
-        //verified and succesfully logged in
-        redirect_to(url_for('/staff/index.php'));
+        //verified
+        if($session->login($admin)) {
+            //successfully logged in...
+            redirect_to(url_for('/staff/index.php'));
+        } else {
+            //unable to log in...
+            $errors[] = "Unable to log in, contact system admin.";
+        }
     }else {
         $errors[] = "Invalid username or password.";
     }

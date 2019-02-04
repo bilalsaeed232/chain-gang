@@ -14,6 +14,8 @@ class Admin extends DatabaseObject {
    public $password;
    public $confirm_password;
 
+   public $check_password = true;
+
    public function __construct($args=[]) {
       $this->id = $args['id'] ?? NULL;
       $this->first_name = $args['first_name'] ?? NULL;
@@ -40,11 +42,20 @@ class Admin extends DatabaseObject {
    }
 
    protected function update() {
+      //NOTE: when editing we don't want to check password unless user tries to give one.
+      //becuase user might be interested in changing other fields only
+      if(is_blank($this->password)) 
+      { 
+         $this->check_password = false; 
+      } else {
+         $this->check_password = true;
+      }
+
       $this->hash_password();
       return parent::update();
    }
 
-  protected function hash_password() {
+   protected function hash_password() {
       if(!is_null($this->password)) {
          $this->hashed_password = password_hash($this->password, PASSWORD_BCRYPT);
       }
@@ -78,16 +89,17 @@ class Admin extends DatabaseObject {
 
 
       //PASSWORD VALIDATIONS
-      if(is_blank($this->password)) {
-         $this->errors[] = "Password is required.";
-      } elseif (!has_length_greater_than($this->password, 7)) {
-         $this->errors[] = "Password must be atleast 8 characters long.";
-      } elseif (is_blank($this->confirm_password)) {
-         $this->errors[] = "Confirm password is required.";
-      } elseif ($this->password != $this->confirm_password) {
-         $this->errors[] = "Password and confirm password must match.";
+      if($this->check_password) { //check to see is user is only editing other fields (not password)
+         if(is_blank($this->password)) {
+            $this->errors[] = "Password is required.";
+         } elseif (!has_length_greater_than($this->password, 7)) {
+            $this->errors[] = "Password must be atleast 8 characters long.";
+         } elseif (is_blank($this->confirm_password)) {
+            $this->errors[] = "Confirm password is required.";
+         } elseif ($this->password != $this->confirm_password) {
+            $this->errors[] = "Password and confirm password must match.";
+         }
       }
-
 
       return $this->errors;
     }

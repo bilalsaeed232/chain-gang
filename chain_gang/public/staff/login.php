@@ -9,6 +9,7 @@ if(is_post_request()) {
     
     if($admin != false && $admin->verify_password($args['password'])) { 
         //verified
+        // echo("password verified"); exit;
         if($session->login($admin)) {
             //successfully logged in...
             redirect_to(url_for('/staff/index.php'));
@@ -19,7 +20,6 @@ if(is_post_request()) {
     }else {
         $errors[] = "Invalid username or password.";
     }
-    // print_r($errors); exit;
 }
 
 ?>

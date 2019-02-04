@@ -11,7 +11,7 @@
 
 <div id="content">
   <div class="admins listing">
-    <h1>Bicycles</h1>
+    <h1>Admins</h1>
 
     <div class="actions">
       <a class="action" href="<?php echo url_for('/staff/admins/new.php'); ?>">Add Admin</a>

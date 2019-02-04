@@ -17,6 +17,8 @@ class Session {
 
     public function login($admin) {
         if($admin) {
+            //prevent session fixation attacks
+            session_regenerate_id();
             $_SESSION['admin_id'] = $admin->id;
             $this->admin_id = $admin->id;
             return true;

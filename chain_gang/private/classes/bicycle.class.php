@@ -5,6 +5,7 @@ class Bicycle {
   // --- START ACTIVE RECORD CODE -- //
   static protected $database;
   static protected $db_columns = ['id', 'brand', 'model', 'year', 'category', 'color', 'description', 'gender', 'price', 'weight_kg', 'condition_id'];
+  public $errors = [];
 
   static public function set_database($database) {
     self::$database = $database;
@@ -64,7 +65,22 @@ class Bicycle {
     return $object;
   }
 
+
+
+  public function validate() {
+    if(is_blank($this->brand)) {
+      $this->errors[] = "Brand must be provided.";
+    }
+
+    if(is_blank($this->model)) {
+      $this->errors[] = "Model must be provided.";
+    }
+
+    return $this->errors;
+  }
+
   public function save() {
+    
     //because new bicycle donot have id so we can differentiate
     if(!isset($this->id)) {
       return $this->create();
@@ -74,6 +90,11 @@ class Bicycle {
   }
   
   protected function create() {
+    //check if validation passes
+    $this->validate();
+    if(!empty($this->errors)) { return false; }
+
+
     $sanitized_attributes = $this->sanitize_attributes();
     // sql for inserting this object into db record
     $sql = "INSERT INTO `bicycles` (";
@@ -97,6 +118,10 @@ class Bicycle {
   }
 
   protected function update() {
+    //check if validation passes
+    $this->validate();
+    if(!empty($this->errors)) { return false; }
+
     $sanitized_attributes = $this->sanitize_attributes();
     $attribute_pairs = [];
 

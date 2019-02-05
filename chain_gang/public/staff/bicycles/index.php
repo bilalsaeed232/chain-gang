@@ -1,10 +1,19 @@
 <?php require_once('../../../private/initialize.php'); 
 
 login_required();
+
+
+// calculate variables for pagination
+$current_page = $_GET['page'] ?? 1;
+$per_page = 5;
+$total_records = Bicycle::count_all();
+
+$pagination = new Pagination($current_page, $per_page, $total_records);
   
 // Find all bicycles;
-$bicycles = Bicycle::find_all();
+$bicycles = Bicycle::find_all($pagination->per_page, $pagination->offset());
   
+
 ?>
 <?php $page_title = 'Bicycles'; ?>
 <?php include(SHARED_PATH . '/staff_header.php'); ?>
@@ -48,7 +57,20 @@ $bicycles = Bicycle::find_all();
     	  </tr>
       <?php } ?>
   	</table>
-
+    
+    <div class="pagination">
+        <?php
+        
+          $url = url_for('/staff/bicycles/index.php');
+          echo $pagination->previous_link($url);
+          echo " ";
+          echo $pagination->next_link($url);
+        
+        ?>
+    </div>
+    <div class="total">
+        <span><?php echo "Total: " . $pagination->total_records; ?></span>
+    </div>
   </div>
 
 </div>

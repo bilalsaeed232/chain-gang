@@ -30,8 +30,18 @@ class DatabaseObject {
         return $objects_array;
     } 
 
-    static public function find_all() {
+    static public function find_all($limit=0, $offset=0) {
         $sql = "SELECT * FROM ". static::$table_name ." ";
+
+        if($limit != 0) {
+            $sql .= "LIMIT {$limit} ";
+        }
+
+        if($offset != 0) {
+            $sql .="OFFSET {$offset}";
+        }
+        
+
         return static::find_by_sql($sql);
     }
 
@@ -51,6 +61,14 @@ class DatabaseObject {
         }
     }
 
+
+    static public function count_all() {
+        $sql = "SELECT COUNT(*) FROM " . static::$table_name;
+        $result_set = static::$database->query($sql);
+        $row = $result_set->fetch_array();
+        $result_set->free();
+        return array_shift($row);
+    }
 
 
 

@@ -1,9 +1,9 @@
 <?php
 
 class Pagination {
-    private $current_page;
-    private $total_records;
-    private $per_page;
+    public $current_page;
+    public $total_records;
+    public $per_page;
 
 
     public function __construct($current=1, $per_page = 10, $total_records=0) {
@@ -17,7 +17,7 @@ class Pagination {
         return ceil($this->total_records / $this->per_page);
     }
 
-    public function offet() {
+    public function offset() {
         return $this->per_page * ($this->current_page - 1);
     }
 
@@ -26,15 +26,19 @@ class Pagination {
         return ($next <= $this->total_pages() ? $next: false);
     }
 
+
     public function previous_page() {
         $prev = $this->current_page - 1;
         return ($prev > 0 ? $prev : false);
     }
 
     public function next_link($url) {
+
         $link = "";
         if ($this->next_page() != false) {
+
             $link .= "<a href='{$url}?page={$this->next_page()}'>";
+            $link .= "Next &raquo;";
             $link .= "</a>";
         }
 
@@ -42,9 +46,12 @@ class Pagination {
     }
 
     public function previous_link($url) {
+
         $link = "";
         if($this->previous_page() != false) {
+
             $link .= "<a href='{$url}?page={$this->previous_page()}'>";
+            $link .= "&laquo; Previous";
             $link .= "</a>";
         }
 

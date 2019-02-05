@@ -3,8 +3,15 @@
 
   login_required();
   
+  //calculate variables for Pagination class
+  $current_page = $_GET['page'] ?? 1;
+  $per_page = 3;
+  $total_records = Admin::count_all();
+
+  $pagination = new Pagination($current_page, $per_page, $total_records);
+
   // Find all admins;
-  $admins = Admin::find_all();
+  $admins = Admin::find_all($pagination->per_page, $pagination->offset());
 ?>
 <?php $page_title = 'Admins'; ?>
 <?php include(SHARED_PATH . '/staff_header.php'); ?>
@@ -42,7 +49,14 @@
     	  </tr>
       <?php } ?>
   	</table>
-
+    <?php 
+      $url = url_for("/staff/admins/index.php");
+      echo $pagination->page_links($url);
+    ?>
+    
+    <div class="total">
+        <span><?php echo "Total: " . $pagination->total_records; ?></span>
+    </div>
   </div>
 
 </div>

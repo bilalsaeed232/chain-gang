@@ -30,7 +30,15 @@
 // $parser = new ParseCSV(PRIVATE_PATH . '/used_bicycles.csv');
 // $bike_array = $parser->parse();
 
-$bikes = Bicycle::find_all();
+// calculate variables for pagination
+$current_page = $_GET['page'] ?? 1;
+$per_page = 5;
+$total_records = Bicycle::count_all();
+
+$pagination = new Pagination($current_page, $per_page, $total_records);
+  
+// Find all bicycles;
+$bikes = Bicycle::find_all($pagination->per_page, $pagination->offset());
 
 ?>
       <?php foreach($bikes as $bike) { ?>
@@ -48,6 +56,11 @@ $bikes = Bicycle::find_all();
 
     </table>
 
+    <?php 
+      $url = url_for("/bicycles.php");
+      echo $pagination->page_links($url);
+    
+    ?>
   </div>
 
 </div>

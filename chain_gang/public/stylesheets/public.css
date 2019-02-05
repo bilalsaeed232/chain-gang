@@ -127,7 +127,8 @@ table#inventory tr th {
   text-align: left;
 }
 
-table#inventory tr td, table#inventory tr th {
+table#inventory tr td,
+table#inventory tr th {
   border: 1px solid #000;
   padding: 3px;
 }
@@ -143,6 +144,20 @@ table#inventory tr td, table#inventory tr th {
   width: 100px;
   font-weight: bold;
 }
+
 .detail dl dd {
   float: left;
+}
+
+
+
+/* PAGINATION STYLING */
+.pagination {
+  margin-top: 10px;
+}
+
+.pagination a {
+  display: inline-block;
+  margin: 0px 5px;
+
 }

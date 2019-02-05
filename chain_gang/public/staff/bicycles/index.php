@@ -58,16 +58,10 @@ $bicycles = Bicycle::find_all($pagination->per_page, $pagination->offset());
       <?php } ?>
   	</table>
     
-    <div class="pagination">
         <?php
-        
           $url = url_for('/staff/bicycles/index.php');
-          echo $pagination->previous_link($url);
-          echo " ";
-          echo $pagination->next_link($url);
-        
+          echo $pagination->page_links($url);
         ?>
-    </div>
     <div class="total">
         <span><?php echo "Total: " . $pagination->total_records; ?></span>
     </div>

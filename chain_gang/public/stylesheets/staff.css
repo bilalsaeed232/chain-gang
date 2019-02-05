@@ -144,3 +144,14 @@ dd {
   float: right;
   font-size: 10px;
 }
+
+/* PAGINATION STYLING */
+.pagination {
+  margin-top: 10px;
+}
+
+.pagination a {
+  display: inline-block;
+  margin: 0px 5px;
+
+}
